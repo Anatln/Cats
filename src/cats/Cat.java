@@ -19,32 +19,36 @@ public class Cat {
 
     private int hunger = 100;
 
-    public void feed(String food) {
+    public String feed(String food) {
         // Котик кушает
-        System.out.println(name + " предложили " + food);
+        String returnString="";
         if (alive) {
             if (hunger >= 70) {
-                System.out.println(name + " с урчением накинулся на еду, и съел " + food);
+                returnString = name + " с урчением накинулся на еду, и съел " + food;
                 hunger = hunger - 40;
-                return;
+                return returnString;
             }
             if (hunger >= 40 && hunger < 70) {
-                System.out.println(name + " неторопясь съел " + food);
+                returnString = name + " неторопясь съел " + food;
                 hunger = hunger - 30;
-                return;
+                return returnString;
             }
             if (hunger < 40) {
-                System.out.println(name + " понюхал " + food + ", но есть не стал");
-                return;
+                returnString =(name + " понюхал " + food + ", но есть не стал");
+                return returnString;
             }
         } else {
-            System.out.println("Увы, мертвые котики не едят");
+            returnString =("Увы, мертвые котики не едят");
+            return returnString;
         }
+        return returnString;
 
     }
 
-    public void tick() {
+    public String tick() {
+        String returnString= "";
         hunger = hunger + 10;
+        System.out.println(hunger);
         if (hunger > 100) {
             
             alive = false;
@@ -52,9 +56,10 @@ public class Cat {
         if (alive) {
             mood=mood+(30-hunger);
             if (hunger > 50) {
-                System.out.println(name + " сказал мяу. Это НАМЕК!");
-            }
-        }
-
+                returnString =(name + " сказал мяу. Это НАМЕК!");
+                return returnString;
+            } return "Котик никак себя не проявляет. Может, котика нет?";
+        } 
+        return "Для мертвых котиков время остановилось";    
     }
 }
