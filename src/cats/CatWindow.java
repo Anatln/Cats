@@ -5,6 +5,8 @@
  */
 package cats;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -22,8 +24,17 @@ public class CatWindow extends javax.swing.JFrame {
         initComponents();
         WindowCat = new Cat();
     }
-
     
+    int msAmount = 5000;
+
+    Timer timer = new Timer(msAmount, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            AddToHistoryText(WindowCat.tick());
+
+        }
+    });
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,12 +53,16 @@ public class CatWindow extends javax.swing.JFrame {
         jLabelName = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButtonTick = new javax.swing.JButton();
+        StopjButton = new javax.swing.JButton();
+        StartjButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -60,8 +75,18 @@ public class CatWindow extends javax.swing.JFrame {
         });
 
         PlayButton.setText("Играть");
+        PlayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PlayButtonActionPerformed(evt);
+            }
+        });
 
         StrokeButton.setText("Гладить рукой");
+        StrokeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StrokeButtonActionPerformed(evt);
+            }
+        });
 
         jTextAreaHistory.setColumns(20);
         jTextAreaHistory.setRows(5);
@@ -76,10 +101,17 @@ public class CatWindow extends javax.swing.JFrame {
             }
         });
 
-        jButtonTick.setText("Tick");
-        jButtonTick.addActionListener(new java.awt.event.ActionListener() {
+        StopjButton.setText("Stop");
+        StopjButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonTickActionPerformed(evt);
+                StopjButtonActionPerformed(evt);
+            }
+        });
+
+        StartjButton.setText("Start");
+        StartjButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StartjButtonActionPerformed(evt);
             }
         });
 
@@ -108,7 +140,9 @@ public class CatWindow extends javax.swing.JFrame {
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
                 .addGap(150, 150, 150)
-                .addComponent(jButtonTick)
+                .addComponent(StartjButton)
+                .addGap(18, 18, 18)
+                .addComponent(StopjButton)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -120,7 +154,9 @@ public class CatWindow extends javax.swing.JFrame {
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                .addComponent(jButtonTick)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(StartjButton)
+                    .addComponent(StopjButton))
                 .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -134,39 +170,72 @@ public class CatWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    void AddToHistoryText(String text)
+    {
+            String s = jTextAreaHistory.getText();
+            s+= text +"\n";
+            jTextAreaHistory.setText(s);          
+    }
+    
     private void FeedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FeedButtonActionPerformed
         // TODO add your handling code here:
         String FeedResult= "";
         FeedResult=WindowCat.feed("корм");
-        String s = jTextAreaHistory.getText();
-        s=s+"\n"+FeedResult;
-        jTextAreaHistory.setText(s);
+        AddToHistoryText(FeedResult);
+
 
     }//GEN-LAST:event_FeedButtonActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
-        WindowCat.name="Котик";
-        WindowCat.colour="Рыжий";
-        WindowCat.age=7*12;
-        jTextFieldName.setText(WindowCat.name);
+//        WindowCat.name="Котик";
+//        WindowCat.colour="Рыжий";
+//        WindowCat.age=7*12;
+//        jTextFieldName.setText(WindowCat.name);
     }//GEN-LAST:event_formWindowActivated
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         WindowCat.name=jTextFieldName.getText();
-        JOptionPane.showMessageDialog(null, "Теперь котейку зовут "+WindowCat.name);
+        AddToHistoryText("Теперь котейку зовут "+WindowCat.name+"\n");
+      
+        
+        //JOptionPane.showMessageDialog(null, "Теперь котейку зовут "+WindowCat.name);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButtonTickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTickActionPerformed
+    private void StopjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopjButtonActionPerformed
         // TODO add your handling code here:
+                AddToHistoryText("Время остановлено");
+        timer.stop();
         
-        String FeedResult= "";
-        FeedResult=WindowCat.tick();
-        String s = jTextAreaHistory.getText();
-        s=s+"\n"+FeedResult;
-        jTextAreaHistory.setText(s);
-    }//GEN-LAST:event_jButtonTickActionPerformed
+
+    }//GEN-LAST:event_StopjButtonActionPerformed
+
+    private void StartjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartjButtonActionPerformed
+        // TODO add your handling code here:
+        AddToHistoryText("Время пошло");
+        timer.start();
+        
+    }//GEN-LAST:event_StartjButtonActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        WindowCat.name="Котик";
+        WindowCat.colour="Рыжий";
+        WindowCat.age=7*12;
+        jTextFieldName.setText(WindowCat.name);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void PlayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayButtonActionPerformed
+        // TODO add your handling code here:
+        AddToHistoryText(WindowCat.Play());
+        
+    }//GEN-LAST:event_PlayButtonActionPerformed
+
+    private void StrokeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StrokeButtonActionPerformed
+        // TODO add your handling code here:
+                AddToHistoryText(WindowCat.Stroke());
+    }//GEN-LAST:event_StrokeButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,9 +276,10 @@ public class CatWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton FeedButton;
     private javax.swing.JButton PlayButton;
+    private javax.swing.JButton StartjButton;
+    private javax.swing.JButton StopjButton;
     private javax.swing.JButton StrokeButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButtonTick;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaHistory;

@@ -17,7 +17,7 @@ public class Cat {
     boolean alive = true;
     int mood = 50;
 
-    private int hunger = 100;
+    private int hunger = 50;
 
     public String feed(String food) {
         // Котик кушает
@@ -34,7 +34,7 @@ public class Cat {
                 return returnString;
             }
             if (hunger < 40) {
-                returnString =(name + " понюхал " + food + ", но есть не стал");
+                returnString =name + " понюхал " + food + ", но есть не стал";
                 return returnString;
             }
         } else {
@@ -48,18 +48,47 @@ public class Cat {
     public String tick() {
         String returnString= "";
         hunger = hunger + 10;
-        System.out.println(hunger);
+        System.out.println("hunger="+hunger);
+        System.out.println("mood="+mood);
         if (hunger > 100) {
             
             alive = false;
         }
         if (alive) {
+            // настроение у котика растет, если голод меньше 30, и падает, если голод больше 30
             mood=mood+(30-hunger);
+            System.out.println("Из-за голода "+hunger+" у котика настроение изменилось на "+(30-hunger));
             if (hunger > 50) {
                 returnString =(name + " сказал мяу. Это НАМЕК!");
                 return returnString;
-            } return "Котик никак себя не проявляет. Может, котика нет?";
+            } return name+" никак себя не проявляет. Может, котика нет?";
         } 
         return "Для мертвых котиков время остановилось";    
     }
-}
+    
+    
+    public String Play(){
+        if (hunger>60) {
+            return "Котик играть не хочет. Лучше покормите животное!";
+                    }
+        hunger = hunger + 20;
+        mood+=50;
+        return "Весело поиграли с питомцем. Настроение на высоте.";
+        }
+        
+    
+    public String Stroke(){
+        if (mood<0) {
+            mood+=10;
+            return name+" цапнул вас за руку. У котика явно плохое настроение!";
+                    }
+        mood+=40;
+        return name+" урчит, улучшая свое и ваше настроение.";
+        }
+    
+        
+    
+    }
+  
+    
+
